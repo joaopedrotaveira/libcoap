@@ -87,7 +87,7 @@ handle_sigint(int signum) {
 void 
 hnd_get_resource(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   rd_t *rd = NULL;
   unsigned char buf[3];
   
@@ -108,7 +108,7 @@ hnd_get_resource(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_put_resource(coap_context_t  *ctx, struct coap_resource_t *resource, 
 		 coap_address_t *peer, coap_pdu_t *request, str *token,
-		 coap_pdu_t *response) {
+		 coap_pdu_t *response, void *userdata) {
 #if 1
   response->hdr->code = COAP_RESPONSE_CODE(501);
 #else /* FIXME */
@@ -182,7 +182,7 @@ hnd_put_resource(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_delete_resource(coap_context_t  *ctx, struct coap_resource_t *resource, 
 		    coap_address_t *peer, coap_pdu_t *request, str *token,
-		    coap_pdu_t *response) {
+		    coap_pdu_t *response, void *userdata) {
   rd_t *rd = NULL;
 
   HASH_FIND(hh, resources, resource->key, sizeof(coap_key_t), rd);
@@ -200,7 +200,7 @@ hnd_delete_resource(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_get_rd(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   unsigned char buf[3];
 
   response->hdr->code = COAP_RESPONSE_CODE(205);
@@ -348,7 +348,7 @@ make_rd(coap_address_t *peer, coap_pdu_t *pdu) {
 void 
 hnd_post_rd(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   coap_resource_t *r;
   coap_opt_iterator_t opt_iter;
   coap_opt_t *query;

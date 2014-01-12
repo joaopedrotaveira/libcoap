@@ -372,6 +372,9 @@ coap_delete_resource(coap_context_t *context, coap_key_t key) {
   if (resource->flags & COAP_RESOURCE_FLAGS_RELEASE_URI)
     coap_free(resource->uri.s);
 
+  if(resource->userdata && resource->userdata_free)
+    resource->userdata_free(resource,resource->userdata);
+
   coap_free(resource);
 #else /* WITH_CONTIKI */
   /* delete registered attributes */
@@ -596,7 +599,7 @@ coap_notify_observers(coap_context_t *context, coap_resource_t *r) {
 	response->hdr->type = COAP_MESSAGE_CON;
       }
       /* fill with observer-specific data */
-      h(context, r, &obs->subscriber, NULL, &token, response);
+      h(context, r, &obs->subscriber, NULL, &token, response, r->userdata);
 
       if (response->hdr->type == COAP_MESSAGE_CON) {
 	tid = coap_send_confirmed(context, &obs->subscriber, response);

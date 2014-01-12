@@ -276,7 +276,8 @@ message_handler(struct coap_context_t  *ctx,
 		const coap_address_t *remote, 
 		coap_pdu_t *sent,
 		coap_pdu_t *received,
-		const coap_tid_t id) {
+		const coap_tid_t id,
+		void *userdata) {
 
   coap_pdu_t *pdu = NULL;
   coap_opt_t *block_opt;
@@ -1061,7 +1062,7 @@ main(int argc, char **argv) {
   }
 
   coap_register_option(ctx, COAP_OPTION_BLOCK2);
-  coap_register_response_handler(ctx, message_handler);
+  coap_register_response_handler(ctx, message_handler, NULL, NULL);
 
   /* join multicast group if requested at command line */
   if (group)

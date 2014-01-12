@@ -146,7 +146,7 @@ hnd_get_index(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_get_resource(coap_context_t  *ctx, struct coap_resource_t *resource, 
 		 coap_address_t *peer, coap_pdu_t *request, str *token,
-		 coap_pdu_t *response) {
+		 coap_pdu_t *response, void *userdata) {
   coap_key_t etag;
   unsigned char buf[2];
   coap_payload_t *test_payload;
@@ -222,7 +222,7 @@ hnd_get_resource(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_delete_resource(coap_context_t  *ctx, struct coap_resource_t *resource, 
 		coap_address_t *peer, coap_pdu_t *request, str *token,
-		coap_pdu_t *response) {
+		coap_pdu_t *response, void *userdata) {
   coap_payload_t *payload;
 
   payload = coap_find_payload(resource->key);
@@ -238,7 +238,7 @@ hnd_delete_resource(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_post_test(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   coap_opt_iterator_t opt_iter;
   coap_opt_t *option;
   coap_payload_t *test_payload;
@@ -304,7 +304,7 @@ hnd_post_test(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_put_test(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   coap_opt_iterator_t opt_iter;
   coap_opt_t *option;
   coap_payload_t *payload;
@@ -355,7 +355,7 @@ hnd_put_test(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_delete_test(coap_context_t  *ctx, struct coap_resource_t *resource, 
 		coap_address_t *peer, coap_pdu_t *request, str *token,
-		coap_pdu_t *response) {
+		coap_pdu_t *response, void *userdata) {
   /* the ETSI validation tool does not like empty resources... */
 #if 0
   coap_payload_t *payload;
@@ -371,7 +371,7 @@ hnd_delete_test(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_get_query(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   coap_opt_iterator_t opt_iter;
   coap_opt_filter_t f;
   coap_opt_t *q;
@@ -409,7 +409,7 @@ hnd_get_query(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_get_separate(coap_context_t  *ctx, struct coap_resource_t *resource, 
 		 coap_address_t *peer, coap_pdu_t *request, str *token,
-		 coap_pdu_t *response) {
+		 coap_pdu_t *response, void *userdata) {
   coap_opt_iterator_t opt_iter;
   coap_opt_t *option;
   coap_opt_filter_t f;

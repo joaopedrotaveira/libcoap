@@ -59,7 +59,7 @@ handle_sigint(int signum) {
 void 
 hnd_get_index(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   unsigned char buf[3];
 
   response->hdr->code = COAP_RESPONSE_CODE(205);
@@ -76,7 +76,7 @@ hnd_get_index(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_get_time(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	     coap_address_t *peer, coap_pdu_t *request, str *token,
-	     coap_pdu_t *response) {
+	     coap_pdu_t *response, void *userdata) {
   coap_opt_iterator_t opt_iter;
   coap_opt_t *option;
   unsigned char buf[40];
@@ -142,7 +142,7 @@ hnd_get_time(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_put_time(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	     coap_address_t *peer, coap_pdu_t *request, str *token,
-	     coap_pdu_t *response) {
+	     coap_pdu_t *response, void *userdata) {
   coap_tick_t t;
   size_t size;
   unsigned char *data;
@@ -174,7 +174,7 @@ hnd_put_time(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_delete_time(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   my_clock_base = 0;		/* mark clock as "deleted" */
   
   /* type = request->hdr->type == COAP_MESSAGE_CON  */
@@ -185,7 +185,7 @@ hnd_delete_time(coap_context_t  *ctx, struct coap_resource_t *resource,
 void 
 hnd_get_async(coap_context_t  *ctx, struct coap_resource_t *resource, 
 	      coap_address_t *peer, coap_pdu_t *request, str *token,
-	      coap_pdu_t *response) {
+	      coap_pdu_t *response, void *userdata) {
   coap_opt_iterator_t opt_iter;
   coap_opt_t *option;
   unsigned long delay = 5;

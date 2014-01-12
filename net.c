@@ -302,6 +302,11 @@ coap_free_context( coap_context_t *context ) {
   if ( !context )
     return;
 
+  if(context->response_handler_userdata &&
+	  context->response_handler_userdata_free)
+    context->response_handler_userdata_free(context,
+      context->response_handler_userdata);
+
   coap_delete_all(context->recvqueue);
   coap_delete_all(context->sendqueue);
 
@@ -1046,7 +1051,7 @@ handle_request(coap_context_t *context, coap_queue_t *node) {
       str token = { node->pdu->hdr->token_length, node->pdu->hdr->token };
 
       h(context, resource, &node->remote, 
-	node->pdu, &token, response);
+	node->pdu, &token, response, resource->userdata);
       if (response->hdr->type != COAP_MESSAGE_NON ||
 	  (response->hdr->code >= 64 
 	   && !coap_is_mcast(&node->local))) {
@@ -1084,7 +1089,8 @@ handle_response(coap_context_t *context,
   if (context->response_handler) {
     context->response_handler(context, 
 			      &rcvd->remote, sent ? sent->pdu : NULL, 
-			      rcvd->pdu, rcvd->id);
+			      rcvd->pdu, rcvd->id,
+			      context->response_handler_userdata);
   } else {
     /* send ACK if rcvd is confirmable (i.e. a separate response) */
     coap_send_ack(context, &rcvd->remote, rcvd->pdu);

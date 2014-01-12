@@ -78,7 +78,10 @@ typedef void (*coap_response_handler_t)(struct coap_context_t  *,
 					const coap_address_t *remote,
 					coap_pdu_t *sent,
 					coap_pdu_t *received,
-					const coap_tid_t id);
+					const coap_tid_t id,
+					void *userdata);
+typedef void (*coap_response_handler_userdata_free_t)
+	(struct coap_context_t *, void * /* userdata */);
 
 #define COAP_MID_CACHE_SIZE 3
 typedef struct {
@@ -121,6 +124,9 @@ typedef struct coap_context_t {
   unsigned int observe;
 
   coap_response_handler_t response_handler;
+  coap_response_handler_userdata_free_t	response_handler_userdata_free;
+  void *response_handler_userdata;
+
 } coap_context_t;
 
 /**
@@ -132,8 +138,12 @@ typedef struct coap_context_t {
  */
 static inline void 
 coap_register_response_handler(coap_context_t *context, 
-			       coap_response_handler_t handler) {
+			       coap_response_handler_t handler,
+			       coap_response_handler_userdata_free_t handler_free,
+			       void *userdata) {
   context->response_handler = handler;
+  context->response_handler_userdata_free = handler_free;
+  context->response_handler_userdata = userdata;
 }
 
 /** 

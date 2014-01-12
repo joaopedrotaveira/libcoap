@@ -40,7 +40,11 @@
 /** Definition of message handler function (@sa coap_resource_t). */
 typedef void (*coap_method_handler_t)
   (coap_context_t  *, struct coap_resource_t *, coap_address_t *, coap_pdu_t *,
-   str * /* token */, coap_pdu_t * /* response */);
+   str * /* token */, coap_pdu_t * /* response */, void * /* userdata */);
+
+/** Definition of free userdata message handler */
+typedef void (*coap_resource_userdata_free_t)
+	(struct coap_resource_t *, void * /* userdata */);
 
 #define COAP_ATTR_FLAGS_RELEASE_NAME  0x1
 #define COAP_ATTR_FLAGS_RELEASE_VALUE 0x2
@@ -84,6 +88,8 @@ typedef struct coap_resource_t {
   str uri;
   int flags;
 
+  coap_resource_userdata_free_t	 userdata_free;
+  void *userdata;
 } coap_resource_t;
 
 /** 
@@ -282,6 +288,19 @@ void coap_delete_observer(coap_resource_t *resource,
  * subscribed observers.
  */
 void coap_check_notify(coap_context_t *context);
+
+/**
+ * Register Userdata and Userdata Free callback handler
+ *
+ * @param resource The resource for which the handler shall be registered.
+ */
+static inline void
+coap_register_userdata(coap_resource_t *resource,
+		      void *userdata, coap_resource_userdata_free_t userdata_free) {
+  assert(resource);
+  resource->userdata_free = userdata_free;
+  resource->userdata = userdata;
+}
 
 /** @} */
 
